@@ -4,11 +4,13 @@
 *Deskripsi : file header untuk logicMinimization.c : sourcecode implementasi algoritma quiene mccluskey
 */
 
+// referensi : http://freesourcecode.net/cprojects/102643/sourcecode/McQuicksy.c 
+
 // KAMUS
     // Tipe data Bentukan
         // type vector : < paired : array [0..limit-1] of integer >
         // type Node : < next          : pointer to Node
-        //               hasPaired     : integer
+        //               hasPaired     : integer [0,1]
         //               numberOfOnes  : integer
         //               paired        : vector
         //               group         : integer
@@ -44,38 +46,89 @@
         // function buatNode(n : integer) -> pointer to node
             // membuat node untuk menyimpan data minterm
         // procedure addPair()
+            // membuat linkes list untuk menyimpan pasangan minterm
+            // I.S. 
+            // F.S. 
+        // procedure createNodePair(p, q : pointer to node) -> pointer to Node
+            // membuat node baru menggunakan Node yang sudah ada
+            // I.S.
+            // F.S.
+        // procedure displayTable()
+            // menampilkan prime implicant table
+            // I.S.
+            // F.S.
+        // procedure binaryFill(input p,q : pointer to node ;  output r : pointer to node)
+            // mengisi nilai biner pada r dengan p dan q. Jika kedua bit sama, maka akan dipertahankan. Jika berbeda, akan bernilai -1
+            // I.S.
+            // F.S.
+        // procedure buatNode(input n : integer)
             //
             // I.S.
-            // F.S. 
-
+            // F.S.
+        // procedure initTable()
+            // menginisiasi seluruh elemen table menjadi -1
+            // I.S.
+            // F.S.
+        // procedure display()
+            // menampilkan minterm dan pasangannya dan nilai biner pada setiap pass
+            // I.S.
+            // F.S.
+        // procedure pair()
+            // melakukan pemasangan node
+            // I.S.
+            // F.S.
+        // procedure addToTable()
+            //
+            // I.S.
+            // F.S.
+        // function ifPairingPossible(p,q : pointer to node) -> integer
+            // memeriksa jika apakah hanya ada perbedaan satu bit antara p dan q (sehingga mungkin dipasangkan)
+        // function findMaxInTable(row : pointer to integer)
+            // mencari prime implikan ang memiliki minterm paling banyak
+            // tidak digunakan pada suatu waktu dan mengembalikan banyak mintermnya
+        // procedure analyseTable()
+            // 
+            // I.S.
+            // F.S.
+        // procedure hapusMintermDariTabel(input n : integer)
+            // menghapus semua minterm pada suatu baris dan kolom implikan
+            // I.S.
+            // F.S.
+        // function banyakImplikan(n : integer, temp : pointer to integer) -> integer
+            // mengembalikan berapa banyak implikan yang ada suatu minterm tertentu
+        // procedure konversiBinerKeNotasiMinterm(input n : integer)
+            // mengonversi dan mencetak biner ke notasi variabel
+            // I.S.
+            // F.S.
+    
 // DEKLARASI KONSTANTA
 #define ukuranBit 4
 #define limit 16
 
 // DEKLARASI TIPE DATA BENTUKAN
-struct vector            //stores the list of all minterms grouped
+struct vector            // menyimpan list semua minterm yang telah dikelompokkan
 {
     int paired[limit];
 };
 
-struct Node                  //node declaration to hold the information about minterms such as number of pairs and number of pairs formed
+struct Node                  // menyimpan informasi tentang minterm seperti banyak pasangan dan banyak pasangan yang terbentuk
 {
-    struct Node* next;    //link to next node in the list
-    int hasPaired;            //stores 1 oe 0 to denote the state of pairing
-    int numberOfOnes;   //stores the number of ones in the minterm
-    struct vector paired; //struct vector to denote other paired minterms
-    int group;                  //denote the group according to the number of ones
-    int binary[ukuranBit];   //stores the binary of the till then formed paired expression
-    int numberOfPairs;    //stores how many paires have been formed 4 denoted 2 paires or 1 quad
+    struct Node* next;     // pointer ke node selanjutnya pada linked-list
+    int hasPaired;         // kondisi pemasangan
+    int numberOfOnes;      // banyaknya '1' pada minterm
+    struct vector paired;  // struct vector untuk menyatakan minterm berpasangan lain
+    int group;             // denote the group according to the number of ones
+    int binary[ukuranBit]; // menyimpan nilai biner dari minterm
+    int numberOfPairs;    // berapa banyak pasangan yang telah terbentuk (contoh: 4 menyatakan 2 double atau 1 quad)
 };
 typedef struct Node node;
 
-struct implicantsTable         //Prime Implicants Table
+struct implicantsTable // Tabel prime implicant
 {
     int arr[limit][ukuranBit];
     int brr[limit][limit];
-    int top;                             //denotes how many prime implicants have been added till now
-    int mintermCounter[limit];    //stores the number of the minterms in the particular prime implicant
+    int top;                         
+    int mintermCounter[limit]; // banyak minterm pada tabel
 } Table;
 
 // DEKLARASI PROTOTIPE FUNGSI
@@ -90,15 +143,14 @@ void binaryFill(node*,node*,node*);
 void initTable();
 int ifPairingPossible(node*,node*);
 int cekDontCare(int);
-int ifMintermPresentInImplicant(int,int);
 void addPair(node*,node*);
 void addToTable();
 void analyseTable();
 void binaryFill(node*,node*,node*);
-void convertBinaryToMintermNotation(int);
+void konversiBinerKeNotasiMinterm(int);
 int findMaxInTable(int*);
 void initTable();
-int numberOfImplicants(int,int*);
+int banyakImplikan(int,int*);
 void pair();
 void hapusMintermDariTabel(int);
 

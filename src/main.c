@@ -62,7 +62,7 @@ int main(void)
         {
             printf("Aksi tidak valid!\n");
         }
-
+        fflush(stdin);
     }
 
     return 0;

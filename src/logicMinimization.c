@@ -6,12 +6,14 @@
 
 // referensi : http://freesourcecode.net/cprojects/102643/sourcecode/McQuicksy.c 
 
+// include library yang dibutuhkan
 #include <stdio.h>
 #include <conio.h>
 #include <malloc.h>
 
 #include "logicMinimization.h"
 
+// REALISASI FUNGSI/PROSEDUR
 int logicMinimization(char modeInput)
 {
     // KAMUS LOKAL
@@ -122,7 +124,7 @@ void add(int n)
     }
 }
 
-void addPair(node *p,node *q)   //create a linked list to store the paired minterms
+void addPair(node *p,node *q)
 {
     // KAMUS LOKAL
         // Variabel
@@ -143,8 +145,13 @@ void addPair(node *p,node *q)   //create a linked list to store the paired minte
     }
 }
 
-node* createNodePair(node *p,node *q)    //creates a new node using given nodes
+node* createNodePair(node *p,node *q)
 {
+    // KAMUS LOKAL
+        // Variabel 
+            // i,j : integer
+            // r : pointer to node
+    // ALGORITMA
     int i,j;
     node *r;
     r=(node *)malloc(sizeof(node));
@@ -169,41 +176,55 @@ node* createNodePair(node *p,node *q)    //creates a new node using given nodes
     return r;
 }
 
-void displayTable()   //display the prime implicants table
-    {
+void displayTable()
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i, j : integer
+    // ALGORITMA
     int i,j;
     printf("Prime Implicants Table.............\n");
     for(i=0; i<Table.top; i++)
-        {
-        convertBinaryToMintermNotation(i);
+    {
+        konversiBinerKeNotasiMinterm(i);
         for(j=0; j<=limit-1; j++)
-            {
+        {
 
             if(Table.brr[i][j]==1)
                 printf("   %d  ",j);
-            }
-        printf("\n");
         }
+        printf("\n");
     }
-void binaryFill(node *p,node *q,node *r)         /*fills the binary values in r
-                                                    using p and q.If both bits are same keep as it is else put -1. */
-    {
+}
+
+void binaryFill(node *p,node *q,node *r)
+{
+    // KAMUS LOKAL
+        // Variabel
+            // c : integer
+    // ALGORITMA
     int c=ukuranBit-1;
     while(c!=-1)
-        {
+    {
         if(p->binary[c]==q->binary[c])
-            {
+        {
             r->binary[c]=p->binary[c];
-            }
-        else
-            {
-            r->binary[c]=-1;
-            }
-        c--;
         }
+        else
+        {
+            r->binary[c]=-1;
+        }
+        c--;
     }
+}
+
 node* buatNode(int n)
 {
+    // KAMUS LOKAL
+        // Variabel
+            // c : integer
+            // p : pointer to node
+    // ALGORITMA
     int c=ukuranBit-1;
     node *p;
     p=(node *)malloc(sizeof(node));
@@ -236,48 +257,60 @@ node* buatNode(int n)
 }
 
 void initTable()
-    {
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i,j : integer
+    // ALGORITMA
     int i,j;
     for(j=0; j<=limit-1; j++)
         for(i=0; i<=limit-1; i++)
-            {
+        {
             Table.brr[j][i]=-1;
-            }
-    }
-void display()     //displays the minterms and their pairing and binary values at each pass
-    {
+        }
+}
+
+void display()
+{
+    // KAMUS LOKAL
+        // Variabel
+            // c : integer
+            // count : integer
+            // j : integer
+    // ALGORITMA
     int c=1,count=0,j=0;
     node *p;
     p=head;
     while(p!=NULL)
-        {
+    {
         j=0;
         while(count<(p->numberOfPairs))
-            {
+        {
             printf("%d,",p->paired.paired[count]);
             count++;
-            }
+        }
         printf("\b");
         count=0;
         printf("   ");
         while(j<ukuranBit)
-            {
+        {
             if(p->binary[j]==-1)
                 printf("%c",'-');
             else
                 printf("%d",p->binary[j]);
             j++;
-            }
+        }
         printf("\n");
         c++;
         p=p->next;
-        }
     }
-void pair()    //does the pairing work
-    {
+}
+
+void pair()
+{
     node *p,*q;
     int oneMatched=0;
-    static int iteration=1;  //stores the iteration or pass count
+    static int iteration=1; // menyimpan jumlah iterasi atau pencacahan pass
     p=head;
     q=p;
     printf("Iteration  %d........\n",iteration);
@@ -285,248 +318,284 @@ void pair()    //does the pairing work
     display();
     newMaxGroup=-1;
     while(p->group!=maxGroup)
-        {
+    {
         q=q->next;
         while(q!=NULL&&(q->group==p->group))
-            {
+        {
             q=q->next;
-            }
+        }
         if(q==NULL)
-            {
+        {
             p=p->next;
             q=p;
             continue;
-            }
+        }
         else
-            {
+        {
             if(q->group!=(p->group+1))
-                {
+            {
                 p=p->next;
                 q=p;
                 continue;
-                }
-            if(ifPairingPossible(p,q))        /*checks if pairing possible and if yes put hasPaired value 1 and
-                                                     add them to the new linked list...*/
-                {
+            }
+            if(ifPairingPossible(p,q)) // jika p dan q mungkin dipasangkan, maka akan ditambahkan ke linked list
+            {
                 oneMatched=1;
                 p->hasPaired=1;
                 q->hasPaired=1;
                 addPair(p,q);
                 if((p->group)>newMaxGroup)
                     newMaxGroup=p->group;
-                }
             }
         }
+    }
+
     addToTable();
-    if(oneMatched)      //checks if atleast one pair has been formed else it returns
-        {
+    if(oneMatched) // memeriksa jika setidaknya ada satu pair yang telah  dibentuk
+    {
         head=head2;
         head2=NULL;
         maxGroup=newMaxGroup;
         pair();
-        }
     }
+}
+
 void addToTable()
-    {
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i, j, k : integer
+            // allMatched : integer
+            // p : pointer to node
+    // ALGORITMA
     int i,j,k,allMatched;
     node *p;
     p=head;
     while(p!=NULL)
-        {
+    {
         if(!(p->hasPaired))
+        {
+            if(Table.top!=0) // memeriksa apakah ada duplikat
             {
-            if(Table.top!=0) //checking for duplicates
-                {
                 for(j=0; j<Table.top; j++)
-                    {
+                {
                     allMatched=1;
                     for(k=0; k<p->numberOfPairs; k++)
-                        {
+                    {
                         if(Table.brr[j][p->paired.paired[k]]==1)
                             continue;
                         else
-                            {
+                        {
                             allMatched=0;
                             break;
-                            }
-                        }
-                    if(allMatched==1)
-                        {
-                        break;
                         }
                     }
-                if(allMatched==1)
+                    if(allMatched==1)
                     {
+                        break;
+                    }
+                }
+                if(allMatched==1)
+                {
                     p=p->next;
                     continue;
-                    }
                 }
+            }
             i=ukuranBit-1;
             while(i!=-1)
-                {
+            {
                 Table.arr[Table.top][i]=p->binary[i];
                 i--;
-                }
+            }
             for(i=0; i<p->numberOfPairs; i++)
-                {
+            {
                 if(cekDontCare(p->paired.paired[i])==1)      //if minterms is in dont care dont add it to table
-                    {
+                {
                     Table.brr[Table.top][p->paired.paired[i]]=-1;
                     continue;
-                    }
+                }
                 Table.mintermCounter[Table.top]++;
                 Table.brr[Table.top][p->paired.paired[i]]=1;
-                }
-            Table.top++;
             }
-        p=p->next;
+            Table.top++;
         }
+        p=p->next;
     }
-int findMaxInTable(int *row)       /*finds the prime implicant which has the greatest number of minterms
-                                                     unused at that point and returns the number and row is assigned the row
-                                                     number..*/
-    {
+}
+
+int findMaxInTable(int *row)
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i : integer
+            // greatest : integer
+    // ALGORITMA
     int i,greatest=-1;
     for(i=0; i<Table.top; i++)
-        {
+    {
         if(Table.mintermCounter[i]>greatest)
-            {
+        {
             *row=i;
             greatest=Table.mintermCounter[i];
-            }
         }
-    return greatest;
     }
-void analyseTable()      //does the analysing work  of the table
-    {
+    return greatest;
+}
+
+void analyseTable()
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i,j,k : integer
+            // greatestRow : integer
+            // ifFirst : integer
+            // essentialPrimeImplicant : array [0..limit-1] of integer
+            // temp : integer
+            // c : integer
+    // ALGORITMA
     int i,j,k,greatestRow,ifFirst=1;
-    int essentialPrimeImplicant[limit];      //stores the row number of all essential prime implicants
+    int essentialPrimeImplicant[limit]; // menyimpan nomor baris dari semua essential prime implikan ke dalam sebuah array of integer
     int temp,c;
     for(i=0; i<=limit-1; i++)
         essentialPrimeImplicant[i]=-1;
     for(i=0; i<=limit-1; i++)
-        {
+    {
         if(minterms[i]==1)
+        {
+            if(banyakImplikan(i,&temp)==1)
             {
-            if(numberOfImplicants(i,&temp)==1)
-                {
                 essentialPrimeImplicant[i]=temp;
-                }
             }
         }
+    }
+
     for(i=0; i<=limit-1; i++)
-        {
+    {
         if(essentialPrimeImplicant[i]!=-1)
-            {
+        {
             if(ifFirst!=1)
                 printf(" + ");
             else
                 ifFirst=0;
-            convertBinaryToMintermNotation(essentialPrimeImplicant[i]);
+            konversiBinerKeNotasiMinterm(essentialPrimeImplicant[i]);
 
             hapusMintermDariTabel(essentialPrimeImplicant[i]);
             for(j=i+1; j<=limit-1; j++)
-                {
+            {
                 if(essentialPrimeImplicant[j]==essentialPrimeImplicant[i])
                     essentialPrimeImplicant[j]=-1;
-                }
+            }
             essentialPrimeImplicant[i]=-1;
 
-            }
         }
-    while(findMaxInTable(&greatestRow)!=0)
-        {
+    }
 
+    while(findMaxInTable(&greatestRow)!=0)
+    {
         if(ifFirst!=1)
             printf(" + ");
         else
             ifFirst=0;
-        convertBinaryToMintermNotation(greatestRow);
+        konversiBinerKeNotasiMinterm(greatestRow);
 
         hapusMintermDariTabel(greatestRow);
-        }
+    }
     printf("\b");
+}
 
-    }
-int ifMintermPresentInImplicant(int minterm,int implicant) //checks if a particular minterm is present in  a particular implicant row
-    {
-    if(Table.brr[implicant][minterm]==1)
-        return 1;
-    else
-        return 0;
-    }
-void hapusMintermDariTabel(int n)    /*given a implicant row it deletes all the minterms from it as
-                                       well as delete all the minterms from that respective columns too...*/
-    {
+void hapusMintermDariTabel(int n) 
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i,j : integer
+    // ALGORITMA
     int i,j;
     for(i=0; i<=limit-1; i++)
-        {
+    {
         if(Table.brr[n][i]==1)
-            {
+        {
             minterms[i]=-1;
 
             for(j=0; j<Table.top; j++)
-                {
+            {
                 if(Table.brr[j][i]==1)
-                    {
+                {
                     Table.brr[j][i]=-1;
                     Table.mintermCounter[j]--;
-                    }
                 }
             }
         }
     }
-int numberOfImplicants(int n,int *temp)     //returns in how many implicants a particular minterm is present
-    {
+}
+
+int banyakImplikan(int n,int *temp)
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i,j : integer
+            // count : integer
+    // ALGORITMA
     int i,j;
     int count=0;
     for(i=0; i<Table.top; i++)
-        {
+    {
         if(Table.brr[i][n]==1)
-            {
+        {
             j=i;
             count++;
-            }
         }
+    }
     *temp=j;
     return count;
-    }
-void convertBinaryToMintermNotation(int n)   //converts and prints the binary into a variable notation
-    {
+}
+
+void konversiBinerKeNotasiMinterm(int n)
+{
+   // KAMUS LOKAL
+        // Variabel
+            // c : integer
+            // characterNormal : array [0..7] of character
+            // characterComplement : array [0..7] of character
+    // ALGORITMA 
     int c=0;
-    /*you can change the variable symbols to use your own and will need to increase if you have to
-     use more than 8 variables......*/
+    
+    // untuk sekarang kita batasi jumlah variabel maksimum sebanyak 8
+    // kalau ingin menaikan jumlah variabel, ubah konten array dan naikkan ukuran Bit
     char charactersNormal[]= {'A','B','C','D','E','F','G','H'};
     char charactersComplement[]= {'a','b','c','d','e','f','g','h'};
     while(c!=ukuranBit)
-        {
-        if(Table.arr[n][c]!=-1)
-            {
-            if(Table.arr[n][c]==1)
-               
-                printf("%c",charactersNormal[c]);
-            else
-                
-                printf("%c",charactersComplement[c]);
-            }
-        c++;
-        }
-    }
-int ifPairingPossible(node *a,node *b)   //checks if there is a change of only one bit
     {
-    int c=ukuranBit-1;
-    int ifOneDissimilar=0;
-    while(c!=-1)
+        if(Table.arr[n][c]!=-1)
         {
+            if(Table.arr[n][c]==1)       
+                printf("%c",charactersNormal[c]);
+
+            else
+                printf("%c",charactersComplement[c]);
+        }
+        c++;
+    }
+}
+
+int ifPairingPossible(node *a,node *b)
+{
+    // KAMUS LOKAL
+        // Variabel
+            // c : integer
+            // apakahBedaSatuBit : boolean
+    // ALGORITMA
+    int c=ukuranBit-1;
+    int apakahBedaSatuBit=0;
+    while(c!=-1)
+    {
         if(a->binary[c]!=b->binary[c])
-            {
-            if(ifOneDissimilar)
+        {
+            if(apakahBedaSatuBit)
                 return 0;
             else
-                ifOneDissimilar=1;
-
-            }
-        c--;
+                apakahBedaSatuBit=1;
         }
-    return 1;
+        c--;
     }
+    return 1;
+}
