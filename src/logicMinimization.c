@@ -62,19 +62,21 @@ int logicMinimization(char modeInput)
             // KondisidontCare : boolean { kondisi yang menyatakan bahwa terdapat don't care}
             // banyakDontCare : integer
             // banyakMinterm : integer
-            // filename : string { nama file input yang berisi representasi adjacency matrix dari graph}
-            // temp  : string (pointer to chracter)
-              // string untuk mengambil token dari filename
-            // temp2 : string (array of character)
-              // string  untuk memodifikasi filename (setelah pemeriksaan apakah tidak kosong dan sesuai format), string filename akan dikembalikan
+            // filename : string { nama file input }
+            // temp  : integer
     // ALGORITMA
 
     int i,temp,kondisiDontCare=0,banyakDontCare, banyakMinterm;
     char line[MAX_LEN];
     char* token;
     
+        // inisiasi variabel global
     maxGroup=-1;
     newMaxGroup=-1;
+    for(i=0; i<limit; i++)
+        minterms[i]=-1;
+    for(i=0; i<limit; i++)
+        dontCares[i]=-1;
 
     if (modeInput == 'm')
     {
@@ -83,10 +85,6 @@ int logicMinimization(char modeInput)
 
         if(banyakMinterm==0)
             return 1;
-        for(i=0; i<limit; i++)
-            minterms[i]=-1;
-        for(i=0; i<limit; i++)
-            dontCares[i]=-1;
         
         for(i=0; i<banyakMinterm; i++)
         {
@@ -143,9 +141,6 @@ int logicMinimization(char modeInput)
             return 1;
 
         // Baca baris kedua : daftar minterm
-            // inisiasi array minterm
-        for(i=0; i<limit; i++)
-            minterms[i]=-1;
         
         // Menyimpan data dari file ke dalam graph
         fgets(line, MAX_LEN, fp);
@@ -167,10 +162,6 @@ int logicMinimization(char modeInput)
         fgets(line, MAX_LEN, fp);
         token = strtok(line, "\n");
         kondisiDontCare = atoi(token);
-
-        // inisiasi array don't care
-        for(i=0; i<limit; i++)
-            dontCares[i]=-1;
 
         if(kondisiDontCare==1)
         {
