@@ -2,9 +2,10 @@
 Tugas besar mata kuliah `EL2008 : Pemecahan masalah dengan C` terkait minimalisasi logic
 
 #### Anggota Kelompok:
-1. Muhammad Mikhail Ghrilman (13220021)
-2. Bostang Palaguna (13220055)
-3. Muhammad Daffa Rasyid (13220059)
+1. Jefferson Grizzlie (13220013)
+2. Muhammad Mikhail Ghrilman (13220021)
+3. Bostang Palaguna (13220055)
+4. Muhammad Daffa Rasyid (13220059)
 
 ### Perintah
 
