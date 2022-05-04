@@ -10,10 +10,49 @@
 #include <stdio.h>
 #include <conio.h>
 #include <malloc.h>
+#include <string.h>
 
 #include "logicMinimization.h"
 
 // REALISASI FUNGSI/PROSEDUR
+
+void validasi_file(char filename[])
+{
+    // KAMUS LOKAL
+        // Variabel
+            // temp : pointer to character { untuk memecah string menjadi tokennya menggunakan strtok }
+            // temp2 : array [0..14] of character { untuk menyimpan direktori relatif file input }
+    // ALGORITMA
+    char *temp;
+
+    temp = strtok(filename,".");
+    temp = strtok(NULL,"\n"); //mengambil string setelah titik
+
+    // Jika format file salah 
+    if (temp == NULL || strcmp(temp,"txt"))
+    {
+        printf("Error: format salah!\n");
+        exit(1); 
+    }
+
+    char temp2[15];
+
+    // Mengubah nama file menjadi directory
+    strcpy(temp2,filename);
+    strcpy(filename,"");
+    strcat(filename,"./input/");
+    strcat(filename,temp2);
+    strcat(filename,".txt");
+
+    // Jika file tidak ada
+    if (fopen(filename,"r")==NULL)
+    {
+        printf("Error: file tidak ada!\n");
+        closing();
+        exit(1);
+    }
+}
+
 int logicMinimization(char modeInput)
 {
     // KAMUS LOKAL
@@ -21,53 +60,158 @@ int logicMinimization(char modeInput)
             // i : integer
             // temp : integer
             // KondisidontCare : boolean { kondisi yang menyatakan bahwa terdapat don't care}
-            // dontCareNumber : integer
+            // banyakDontCare : integer
             // banyakMinterm : integer
+            // filename : string { nama file input yang berisi representasi adjacency matrix dari graph}
+            // temp  : string (pointer to chracter)
+              // string untuk mengambil token dari filename
+            // temp2 : string (array of character)
+              // string  untuk memodifikasi filename (setelah pemeriksaan apakah tidak kosong dan sesuai format), string filename akan dikembalikan
     // ALGORITMA
-    int i,temp,kondisiDontCare=0,dontCareNumber, banyakMinterm;
+
+    int i,temp,kondisiDontCare=0,banyakDontCare, banyakMinterm;
+    char line[MAX_LEN];
+    char* token;
     
     maxGroup=-1;
     newMaxGroup=-1;
-    printf("Masukkan banyaknya minterm:\n>>> ");
-    scanf("%d",&banyakMinterm);
 
-    if(banyakMinterm==0)
-        return 1;
-    for(i=0; i<limit; i++)
-        minterms[i]=-1;
-    for(i=0; i<limit; i++)
-        dontCares[i]=-1;
-    
-    for(i=0; i<banyakMinterm; i++)
+    if (modeInput == 'm')
     {
-        printf("Masukkan minterm ke-%d:\n>>> ",i+1);
-        scanf("%d",&temp);
-        minterms[temp]=1;
-        add(temp);
-    }
-    printf("Apakah ada don't care? (1/0)\n>>> ");
-    scanf("%d",&kondisiDontCare);
-    if(kondisiDontCare==1)
-    {
-        printf("Masukkan banyaknya don't care:\n>>> ");
-        scanf("%d",&dontCareNumber);
-        for(i=0; i<dontCareNumber; i++)
+        printf("Masukkan banyaknya minterm:\n>>> ");
+        scanf("%d",&banyakMinterm);
+
+        if(banyakMinterm==0)
+            return 1;
+        for(i=0; i<limit; i++)
+            minterms[i]=-1;
+        for(i=0; i<limit; i++)
+            dontCares[i]=-1;
+        
+        for(i=0; i<banyakMinterm; i++)
         {
-            printf("Masukkan don't care ke-%d:\n>>> ",i+1);
+            printf("Masukkan minterm ke-%d:\n>>> ",i+1);
             scanf("%d",&temp);
-            dontCares[temp]=1;
+            minterms[temp]=1;
             add(temp);
+        }
+        printf("Apakah ada don't care? (1/0)\n>>> ");
+        scanf("%d",&kondisiDontCare);
+        if(kondisiDontCare==1)
+        {
+            printf("Masukkan banyaknya don't care:\n>>> ");
+            scanf("%d",&banyakDontCare);
+            for(i=0; i<banyakDontCare; i++)
+            {
+                printf("Masukkan don't care ke-%d:\n>>> ",i+1);
+                scanf("%d",&temp);
+                dontCares[temp]=1;
+                add(temp);
+            }
         }
     }
 
+    else if (modeInput == 'f')
+    {
+        // menerima input file eksternal dan validasi
+        char filename[MAX_LEN];
+        printf("Masukkan nama File eksternal:\n>>> ");
+        scanf("%s", &filename);
+
+        validasi_file(filename);
+        // membaca isi file eksternal (setelah divalidasi)
+            
+        FILE* fp = fopen(filename, "r");
+
+        // Cek file sampai akhir
+        fseek(fp, 0, SEEK_END);
+        // Jika file kosong
+        if (ftell(fp)==0)
+        {
+            printf("Error: file kosong!\n");
+            exit(1);
+        }
+
+        fseek(fp, 0, SEEK_SET); // Kembali ke awal
+
+        // Baca baris pertama : banyak minterm
+        fgets(line, MAX_LEN, fp);
+        token = strtok(line, "\n");
+        banyakMinterm = atoi(token);
+
+        if(banyakMinterm==0)
+            return 1;
+
+        // Baca baris kedua : daftar minterm
+            // inisiasi array minterm
+        for(i=0; i<limit; i++)
+            minterms[i]=-1;
+        
+        // Menyimpan data dari file ke dalam graph
+        fgets(line, MAX_LEN, fp);
+        token = strtok(line, ",");
+        minterms[atoi(token)]=1;
+        add(atoi(token));
+        
+        for (int i=1;i<(banyakMinterm-1);i++)
+        {
+            token = strtok(NULL, ",");
+            minterms[atoi(token)]=1;
+            add(atoi(token));
+        }
+        token = strtok(NULL, "\n"); // membaca elemen terakhir pada baris kedua
+        minterms[atoi(token)]=1;
+        add(atoi(token));
+
+        // Baca baris ketiga : apakah ada don't care/tidak
+        fgets(line, MAX_LEN, fp);
+        token = strtok(line, "\n");
+        kondisiDontCare = atoi(token);
+
+        // inisiasi array don't care
+        for(i=0; i<limit; i++)
+            dontCares[i]=-1;
+
+        if(kondisiDontCare==1)
+        {
+            // Baca baris keempat : banyak don't care
+            fgets(line, MAX_LEN, fp);
+            token = strtok(line, "\n");
+            banyakDontCare = atoi(token);
+        
+            // Baca baris kelima : daftar don't care
+            fgets(line, MAX_LEN, fp);
+            token = strtok(line, ",");
+            dontCares[atoi(token)]=1;
+            add(atoi(token));
+            
+            for(i=1; i<(banyakDontCare-1); i++)
+            {
+                token = strtok(NULL, ",");
+                dontCares[atoi(token)]=1;
+                add(atoi(token));
+            }
+            token = strtok(NULL, "\n");
+            dontCares[atoi(token)]=1;
+            add(atoi(token));
+        }
+        
+        fclose(fp);
+    }
+
+    else
+    {
+        return 0;
+    }
+
     Table.top=0;
-    initTable();    //initialise the Prime Implicants Table with all cells -1 to denote empty.
-    pair();           //do the pairing
-    displayTable(); //display the Prime Implicants Table
-    printf("Simplified Boolean Expression is.......");
-    analyseTable();  //Analyse the table and print the result
-    
+    initTable();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
+    pair();           // melakukan pemasangan minterm (pengisian tabel prime implicant)
+    displayTable(); // mencetak tabel prime implicant
+    printf("Fungsi Logika setelah minimisasi:\n\t");
+    analyseTable();  // menganalisis tabel dan mencetak hasil
     printf("\n");
+    
     return 0;
 }
 
@@ -183,7 +327,7 @@ void displayTable()
             // i, j : integer
     // ALGORITMA
     int i,j;
-    printf("Prime Implicants Table.............\n");
+    printf("Tabel Prime Implicant:\n");
     for(i=0; i<Table.top; i++)
     {
         konversiBinerKeNotasiMinterm(i);
@@ -313,7 +457,7 @@ void pair()
     static int iteration=1; // menyimpan jumlah iterasi atau pencacahan pass
     p=head;
     q=p;
-    printf("Iteration  %d........\n",iteration);
+    printf("Iterasi ke-%d:\n",iteration);
     iteration++;
     display();
     newMaxGroup=-1;

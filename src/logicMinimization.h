@@ -100,10 +100,15 @@
             // mengonversi dan mencetak biner ke notasi variabel
             // I.S.
             // F.S.
+        // procedure validasi_file(char filename[])
+            // memvalidasi nama dan format file eksternal
+            // I.S. -
+            // F.S. nama file ada dan format file benar (.txt)
     
 // DEKLARASI KONSTANTA
 #define ukuranBit 4
 #define limit 16
+#define MAX_LEN 127
 
 // DEKLARASI TIPE DATA BENTUKAN
 struct vector            // menyimpan list semua minterm yang telah dikelompokkan
