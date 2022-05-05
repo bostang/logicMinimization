@@ -53,7 +53,7 @@
             // membuat node baru menggunakan Node yang sudah ada
             // I.S.
             // F.S.
-        // procedure displayTable()
+        // procedure tampilkanTabel()
             // menampilkan prime implicant table
             // I.S.
             // F.S.
@@ -65,7 +65,7 @@
             //
             // I.S.
             // F.S.
-        // procedure initTable()
+        // procedure inisiasiTabel()
             // menginisiasi seluruh elemen table menjadi -1
             // I.S.
             // F.S.
@@ -77,7 +77,7 @@
             // melakukan pemasangan node
             // I.S.
             // F.S.
-        // procedure addToTable()
+        // procedure tambahKeTabel()
             //
             // I.S.
             // F.S.
@@ -86,7 +86,7 @@
         // function findMaxInTable(row : pointer to integer)
             // mencari prime implikan ang memiliki minterm paling banyak
             // tidak digunakan pada suatu waktu dan mengembalikan banyak mintermnya
-        // procedure analyseTable()
+        // procedure analisisTabel()
             // 
             // I.S.
             // F.S.
@@ -137,29 +137,33 @@ struct implicantsTable // Tabel prime implicant
 } Table;
 
 // DEKLARASI PROTOTIPE FUNGSI
+    // terkait algoritma minimisasi logika
 int logicMinimization(char modeInput, int counter);
 void add(int);
 node* buatNode(int);
 void pair();
 void display();
-void displayTable();
+void tampilkanTabel();
 node* createNodePair(node*,node*);
 void binaryFill(node*,node*,node*);
-void initTable();
+void inisiasiTabel();
 int ifPairingPossible(node*,node*);
 int cekDontCare(int);
 void addPair(node*,node*);
-void addToTable();
-void analyseTable();
+void tambahKeTabel();
+void analisisTabel();
 void binaryFill(node*,node*,node*);
 void konversiBinerKeNotasiMinterm(int);
 int findMaxInTable(int*);
-void initTable();
+void inisiasiTabel();
 int banyakImplikan(int,int*);
 void pair();
 void hapusMintermDariTabel(int);
+
+    // terkait pemrosesan file
 void simpanKeFile(int solusi[], int n, int noFile);
 void hapusFile(int nFile);
+void validasi_file(char filename[]);
 
 // DEKLARASI VARIABEL
 node *head,*head2;

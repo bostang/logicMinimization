@@ -13,8 +13,10 @@
 #include <string.h>
 
 #include "logicMinimization.h"
+#include "interface.h"
 
 // REALISASI FUNGSI/PROSEDUR
+    // Fungsi/Prosedur terkait pemrosesan file
 void simpanKeFile(int solusi[], int n, int noFile)
 {      
     // KAMUS LOKAL
@@ -90,6 +92,7 @@ void validasi_file(char filename[])
     if (temp == NULL || strcmp(temp,"txt"))
     {
         printf("Error: format salah!\n");
+        closing();
         exit(1); 
     }
 
@@ -111,6 +114,7 @@ void validasi_file(char filename[])
     }
 }
 
+    // Fungsi/Prosedur terkait algoritma minimisasi logika
 int logicMinimization(char modeInput, int counter)
 {
     // KAMUS LOKAL
@@ -256,11 +260,11 @@ int logicMinimization(char modeInput, int counter)
     }
 
     Table.top=0;
-    initTable();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
+    inisiasiTabel();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
     pair();           // melakukan pemasangan minterm (pengisian tabel prime implicant)
-    displayTable(); // mencetak tabel prime implicant
+    tampilkanTabel(); // mencetak tabel prime implicant
     printf("Fungsi Logika setelah minimisasi:\n\t");
-    analyseTable();  // menganalisis tabel dan mencetak hasil
+    analisisTabel();  // menganalisis tabel dan mencetak hasil
     printf("\n");
     
     return 0;
@@ -371,7 +375,7 @@ node* createNodePair(node *p,node *q)
     return r;
 }
 
-void displayTable()
+void tampilkanTabel()
 {
     // KAMUS LOKAL
         // Variabel
@@ -451,7 +455,7 @@ node* buatNode(int n)
     return p;
 }
 
-void initTable()
+void inisiasiTabel()
 {
     // KAMUS LOKAL
         // Variabel
@@ -545,7 +549,7 @@ void pair()
         }
     }
 
-    addToTable();
+    tambahKeTabel();
     if(oneMatched) // memeriksa jika setidaknya ada satu pair yang telah  dibentuk
     {
         head=head2;
@@ -555,7 +559,7 @@ void pair()
     }
 }
 
-void addToTable()
+void tambahKeTabel()
 {
     // KAMUS LOKAL
         // Variabel
@@ -637,7 +641,7 @@ int findMaxInTable(int *row)
     return greatest;
 }
 
-void analyseTable()
+void analisisTabel()
 {
     // KAMUS LOKAL
         // Variabel

@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "conio.h": "c",
-        "logicminimization.h": "c"
+        "logicminimization.h": "c",
+        "string.h": "c",
+        "malloc.h": "c"
     }
 }
