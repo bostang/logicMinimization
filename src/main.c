@@ -11,6 +11,7 @@
         // aksi : character
         // isProgramFinished : boolean
         // modeInput : character
+        // counter : integer { berapa kali algoritma minimisasi logika telah dijalankan }
 
 // ALGORITMA UTAMA
 
@@ -25,6 +26,7 @@ int main(void)
     char aksi;
     int isProgramFinished = 0;
     char modeInput;
+    int counter = 0;
 
     opening();
     while (!isProgramFinished)
@@ -41,7 +43,8 @@ int main(void)
             fflush(stdin);
             if (modeInput == 'm' || modeInput == 'f')
             {
-                logicMinimization(modeInput);
+                counter++;
+                logicMinimization(modeInput, counter);
             }
             else
             {

@@ -137,7 +137,7 @@ struct implicantsTable // Tabel prime implicant
 } Table;
 
 // DEKLARASI PROTOTIPE FUNGSI
-int logicMinimization(char modeInput);
+int logicMinimization(char modeInput, int counter);
 void add(int);
 node* buatNode(int);
 void pair();
@@ -158,7 +158,8 @@ void initTable();
 int banyakImplikan(int,int*);
 void pair();
 void hapusMintermDariTabel(int);
-
+void simpanKeFile(int solusi[], int n, int noFile);
+void hapusFile(int nFile);
 
 // DEKLARASI VARIABEL
 node *head,*head2;

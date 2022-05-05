@@ -15,6 +15,64 @@
 #include "logicMinimization.h"
 
 // REALISASI FUNGSI/PROSEDUR
+void simpanKeFile(int solusi[], int n, int noFile)
+{      
+    // KAMUS LOKAL
+        // Variabel
+            // fp : pointer to FILE
+            // namaFile : string { nama file yang akan ditulis } 
+    // ALGORITMA
+    char namaFile[MAX_LEN] = "";
+    strcat(namaFile,"./output/"); // note : folder output sudah harus ada terlebih dahulu!
+    strcat(namaFile,"solusi_");
+    char buff[3];
+    strcat(namaFile,itoa(noFile,buff,10));
+    strcat(namaFile,".txt");
+
+    FILE* fp;
+    fp = fopen(namaFile,"w");
+    
+    for (int i = 0; i < n; ++i)
+    {
+        fprintf(fp,"%d",solusi[i]);
+        if (i != (n-1))
+        {
+           fprintf(fp,"-");    
+        }
+    }
+    strcpy(namaFile,""); // mengosongkan kembali string namaFile
+
+    fclose(fp);
+}
+
+void hapusFile(int nFile)
+{
+    // KAMUS LOKAL
+        // Variabel
+            // namaFile : string
+            // ret : integer { apakah sukses menghapus file atau tidak }
+    // ALGORITMA
+    for (int i = 1;i<=nFile;i++)
+    {
+        char namaFile[MAX_LEN] = "";
+        strcat(namaFile,"./output/"); // note : folder output sudah harus ada terlebih dahulu!
+        strcat(namaFile,"solusi_");
+        char buff[3];
+        strcat(namaFile,itoa(i,buff,10));
+        strcat(namaFile,".txt");
+
+        int ret = remove(namaFile);
+
+        if(ret == 0)
+        {
+        printf("File %s sukses dihapus\n",namaFile);
+        } else {
+        printf("Error: File %s gagal dihapus\n");
+        }
+
+        strcpy(namaFile,""); // mengosongkan kembali string namaFile
+    }
+}
 
 void validasi_file(char filename[])
 {
@@ -53,7 +111,7 @@ void validasi_file(char filename[])
     }
 }
 
-int logicMinimization(char modeInput)
+int logicMinimization(char modeInput, int counter)
 {
     // KAMUS LOKAL
         // Variabel
@@ -64,6 +122,8 @@ int logicMinimization(char modeInput)
             // banyakMinterm : integer
             // filename : string { nama file input }
             // temp  : integer
+            // fp : pointer to FILE
+            // namaFile : string
     // ALGORITMA
 
     int i,temp,kondisiDontCare=0,banyakDontCare, banyakMinterm;
