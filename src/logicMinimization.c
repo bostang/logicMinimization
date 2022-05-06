@@ -128,8 +128,9 @@ int logicMinimization(char modeInput, int counter)
             // temp  : integer
             // fp : pointer to FILE
             // namaFile : string
+            // n_interation : integer { pencacah berapa banyak iterasi yang sudah terjadi }
     // ALGORITMA
-
+    int n_iteration = 1;
     int i,temp,kondisiDontCare=0,banyakDontCare, banyakMinterm;
     char line[MAX_LEN];
     char* token;
@@ -261,7 +262,7 @@ int logicMinimization(char modeInput, int counter)
 
     Table.top=0;
     inisiasiTabel();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
-    pair();           // melakukan pemasangan minterm (pengisian tabel prime implicant)
+    pair(&n_iteration);           // melakukan pemasangan minterm (pengisian tabel prime implicant)
     tampilkanTabel(); // mencetak tabel prime implicant
     printf("Fungsi Logika setelah minimisasi:\n\t");
     analisisTabel();  // menganalisis tabel dan mencetak hasil
@@ -509,15 +510,13 @@ void display()
     }
 }
 
-void pair()
+void pair(int* n_iteration)
 {
     node *p,*q;
     int oneMatched=0;
-    static int iteration=1; // menyimpan jumlah iterasi atau pencacahan pass
     p=head;
     q=p;
-    printf("Iterasi ke-%d:\n",iteration);
-    iteration++;
+    printf("Iterasi ke-%d:\n",*n_iteration);
     display();
     newMaxGroup=-1;
     while(p->group!=maxGroup)
@@ -559,7 +558,8 @@ void pair()
         head=head2;
         head2=NULL;
         maxGroup=newMaxGroup;
-        pair();
+        *n_iteration = (*n_iteration) + 1;
+        pair(n_iteration);
     }
 }
 

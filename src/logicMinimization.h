@@ -141,7 +141,7 @@ struct implicantsTable // Tabel prime implicant
 int logicMinimization(char modeInput, int counter);
 void add(int);
 node* buatNode(int);
-void pair();
+void pair(int* n_iteration);
 void display();
 void tampilkanTabel();
 node* createNodePair(node*,node*);
@@ -157,7 +157,6 @@ void konversiBinerKeNotasiMinterm(int);
 int findMaxInTable(int*);
 void inisiasiTabel();
 int banyakImplikan(int,int*);
-void pair();
 void hapusMintermDariTabel(int);
 
     // terkait pemrosesan file
