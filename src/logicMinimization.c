@@ -265,6 +265,10 @@ int logicMinimization(char modeInput, int counter)
     tampilkanTabel(); // mencetak tabel prime implicant
     printf("Fungsi Logika setelah minimisasi:\n\t");
     analisisTabel();  // menganalisis tabel dan mencetak hasil
+           
+            // head dan head2 harus kembali di-NULL kan agar hasil benar pada iterasi berikutnya
+    head = NULL;
+    head2 = NULL;
     printf("\n");
     
     return 0;

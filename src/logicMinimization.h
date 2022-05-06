@@ -70,7 +70,7 @@
             // I.S.
             // F.S.
         // procedure display()
-            // menampilkan minterm dan pasangannya dan nilai biner pada setiap pass
+            // menampilkan minterm dan pasangannya dan nilai biner pada setiap pass (L1, L2, L3, dst.)
             // I.S.
             // F.S.
         // procedure pair()
