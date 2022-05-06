@@ -17,64 +17,6 @@
 
 // REALISASI FUNGSI/PROSEDUR
     // Fungsi/Prosedur terkait pemrosesan file
-void simpanKeFile(int solusi[], int n, int noFile)
-{      
-    // KAMUS LOKAL
-        // Variabel
-            // fp : pointer to FILE
-            // namaFile : string { nama file yang akan ditulis } 
-    // ALGORITMA
-    char namaFile[MAX_LEN] = "";
-    strcat(namaFile,"./output/"); // note : folder output sudah harus ada terlebih dahulu!
-    strcat(namaFile,"solusi_");
-    char buff[3];
-    strcat(namaFile,itoa(noFile,buff,10));
-    strcat(namaFile,".txt");
-
-    FILE* fp;
-    fp = fopen(namaFile,"w");
-    
-    for (int i = 0; i < n; ++i)
-    {
-        fprintf(fp,"%d",solusi[i]);
-        if (i != (n-1))
-        {
-           fprintf(fp,"-");    
-        }
-    }
-    strcpy(namaFile,""); // mengosongkan kembali string namaFile
-
-    fclose(fp);
-}
-
-void hapusFile(int nFile)
-{
-    // KAMUS LOKAL
-        // Variabel
-            // namaFile : string
-            // ret : integer { apakah sukses menghapus file atau tidak }
-    // ALGORITMA
-    for (int i = 1;i<=nFile;i++)
-    {
-        char namaFile[MAX_LEN] = "";
-        strcat(namaFile,"./output/"); // note : folder output sudah harus ada terlebih dahulu!
-        strcat(namaFile,"solusi_");
-        char buff[3];
-        strcat(namaFile,itoa(i,buff,10));
-        strcat(namaFile,".txt");
-
-        int ret = remove(namaFile);
-
-        if(ret == 0)
-        {
-        printf("File %s sukses dihapus\n",namaFile);
-        } else {
-        printf("Error: File %s gagal dihapus\n");
-        }
-
-        strcpy(namaFile,""); // mengosongkan kembali string namaFile
-    }
-}
 
 void validasi_file(char filename[])
 {
@@ -260,7 +202,7 @@ int logicMinimization(char modeInput, int counter)
         return 0;
     }
 
-    Table.top=0;
+    Tabel.top=0;
     inisiasiTabel();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
     pair(&n_iteration);           // melakukan pemasangan minterm (pengisian tabel prime implicant)
     tampilkanTabel(); // mencetak tabel prime implicant
@@ -294,6 +236,7 @@ void add(int n)
     p=buatNode(n);
     if(p!=NULL)
     {
+			// jika p adalah node pertama
         if(head==NULL)
         {
             head=p;
@@ -388,13 +331,13 @@ void tampilkanTabel()
     // ALGORITMA
     int i,j;
     printf("Tabel Prime Implicant:\n");
-    for(i=0; i<Table.top; i++)
+    for(i=0; i<Tabel.top; i++)
     {
         konversiBinerKeNotasiMinterm(i);
         for(j=0; j<=limit-1; j++)
         {
 
-            if(Table.brr[i][j]==1)
+            if(Tabel.brr[i][j]==1)
                 printf("   %d  ",j);
         }
         printf("\n");
@@ -470,7 +413,7 @@ void inisiasiTabel()
     for(j=0; j<=limit-1; j++)
         for(i=0; i<=limit-1; i++)
         {
-            Table.brr[j][i]=-1;
+            Tabel.brr[j][i]=-1;
         }
 }
 
@@ -490,15 +433,15 @@ void display()
         j=0;
         while(count<(p->numberOfPairs))
         {
-            printf("%d,",p->paired.paired[count]);
+            printf("%d,",p->paired.paired[count]); // menampilkan pasangan minterm
             count++;
         }
         printf("\b");
         count=0;
         printf("   ");
-        while(j<ukuranBit)
+        while(j<ukuranBit) // menampikan representasi biner dari pasangan minterm
         {
-            if(p->binary[j]==-1)
+            if(p->binary[j]==-1) // dont care
                 printf("%c",'-');
             else
                 printf("%d",p->binary[j]);
@@ -519,6 +462,7 @@ void pair(int* n_iteration)
     printf("Iterasi ke-%d:\n",*n_iteration);
     display();
     newMaxGroup=-1;
+		// mencari minterm yang bisa dipasangkan
     while(p->group!=maxGroup)
     {
         q=q->next;
@@ -578,14 +522,14 @@ void tambahKeTabel()
     {
         if(!(p->hasPaired))
         {
-            if(Table.top!=0) // memeriksa apakah ada duplikat
+            if(Tabel.top!=0) // memeriksa apakah ada duplikat
             {
-                for(j=0; j<Table.top; j++)
+                for(j=0; j<Tabel.top; j++)
                 {
                     allMatched=1;
                     for(k=0; k<p->numberOfPairs; k++)
                     {
-                        if(Table.brr[j][p->paired.paired[k]]==1)
+                        if(Tabel.brr[j][p->paired.paired[k]]==1)
                             continue;
                         else
                         {
@@ -607,20 +551,20 @@ void tambahKeTabel()
             i=ukuranBit-1;
             while(i!=-1)
             {
-                Table.arr[Table.top][i]=p->binary[i];
+                Tabel.arr[Tabel.top][i]=p->binary[i];
                 i--;
             }
             for(i=0; i<p->numberOfPairs; i++)
             {
-                if(cekDontCare(p->paired.paired[i])==1)      //if minterms is in dont care dont add it to table
+                if(cekDontCare(p->paired.paired[i])==1)      //jika minterm ada di array don't care, maka jangan tambahkan ke tabel
                 {
-                    Table.brr[Table.top][p->paired.paired[i]]=-1;
+                    Tabel.brr[Tabel.top][p->paired.paired[i]]=-1;
                     continue;
                 }
-                Table.mintermCounter[Table.top]++;
-                Table.brr[Table.top][p->paired.paired[i]]=1;
+                Tabel.mintermCounter[Tabel.top]++;
+                Tabel.brr[Tabel.top][p->paired.paired[i]]=1;
             }
-            Table.top++;
+            Tabel.top++;
         }
         p=p->next;
     }
@@ -634,12 +578,12 @@ int findMaxInTable(int *row)
             // greatest : integer
     // ALGORITMA
     int i,greatest=-1;
-    for(i=0; i<Table.top; i++)
+    for(i=0; i<Tabel.top; i++)
     {
-        if(Table.mintermCounter[i]>greatest)
+        if(Tabel.mintermCounter[i]>greatest)
         {
             *row=i;
-            greatest=Table.mintermCounter[i];
+            greatest=Tabel.mintermCounter[i];
         }
     }
     return greatest;
@@ -715,16 +659,16 @@ void hapusMintermDariTabel(int n)
     int i,j;
     for(i=0; i<=limit-1; i++)
     {
-        if(Table.brr[n][i]==1)
+        if(Tabel.brr[n][i]==1)
         {
             minterms[i]=-1;
 
-            for(j=0; j<Table.top; j++)
+            for(j=0; j<Tabel.top; j++)
             {
-                if(Table.brr[j][i]==1)
+                if(Tabel.brr[j][i]==1)
                 {
-                    Table.brr[j][i]=-1;
-                    Table.mintermCounter[j]--;
+                    Tabel.brr[j][i]=-1;
+                    Tabel.mintermCounter[j]--;
                 }
             }
         }
@@ -740,9 +684,9 @@ int banyakImplikan(int n,int *temp)
     // ALGORITMA
     int i,j;
     int count=0;
-    for(i=0; i<Table.top; i++)
+    for(i=0; i<Tabel.top; i++)
     {
-        if(Table.brr[i][n]==1)
+        if(Tabel.brr[i][n]==1)
         {
             j=i;
             count++;
@@ -768,9 +712,9 @@ void konversiBinerKeNotasiMinterm(int n)
     char charactersComplement[]= {'a','b','c','d','e','f','g','h'};
     while(c!=ukuranBit)
     {
-        if(Table.arr[n][c]!=-1)
+        if(Tabel.arr[n][c]!=-1)
         {
-            if(Table.arr[n][c]==1)       
+            if(Tabel.arr[n][c]==1)       
                 printf("%c",charactersNormal[c]);
 
             else

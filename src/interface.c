@@ -11,8 +11,6 @@
 #include <stdlib.h>
 #include "interface.h"
 
-
-
 // DEKLARASI VARIABEL
 const char pengarang[n_pengarang][63]=
 {

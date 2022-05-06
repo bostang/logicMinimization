@@ -7,9 +7,35 @@
 // KAMUS
     // Prosedur/Fungsi
         // procedure help()
-            // menampilkan opsi 
+            // menampilkan opsi aks kepada user
+            // I.S -
+            // F.S pilihan opsi ditampilkan ke layar
+        // procedure cetakBumperOpening()
+            // menampilkan ASCII art 'Logic minimization' ke layar
+            // I.S array of string bumper_opening terdefinisi
+            // F.S ASCII art selamat datang ditampilkan ke layar
+        // procedure cetakBumperClosing()
+            // menampilkan ASCII art 'terimakasih' ke layar
+            // I.S array of string bumper_closing terdefinisi
+            // F.S ASCII art penutup ditampilkan ke layar
+        // procedure cetakPengarang()
+            // menampilkan daftar anggota kelompok ke layar
+            // I.S array of string pengarang terdefinisi
+            // F.S daftar pengarang program tercetak ke layar
+        // procedure cetakKredit()
+            // menampilkan daftar referensi ke layar
+            // I.S array of string referensi terdefinisi
+            // F.S daftar referensi program tercetak ke layar
+        // procedure opening()
+            // rutin pembuka program
+            // I.S -
+            // F.S bumper opening, pengarang, dan pilihan opsi ditampilkan ke layar
+        // procedure closing()
+            // rutin penutup program
+            // I.S -
+            // F.S bumper closing, kredit ditampilkan ke layar  
+        
 // ALGORITMA
-
 
 // DEKLARASI KONSTANTA
 #define n_referensi 2

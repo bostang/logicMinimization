@@ -41,65 +41,65 @@
             // nilai balikan : 0 : bukan don't care ; 1 : don't care
         // procedure add(input n : integer)
             // membuat linked-list untuk menyimpan minterm
-            // I.S. 
-            // F.S. 
+            // I.S. nilai minterm yang ingin ditambahkan ke linked list terdefinisi 
+            // F.S. sebuah node dibuat dan ditambahkan ke linked-list 
         // function buatNode(n : integer) -> pointer to node
             // membuat node untuk menyimpan data minterm
         // procedure addPair()
-            // membuat linkes list untuk menyimpan pasangan minterm
-            // I.S. 
-            // F.S. 
+            // membuat linked list untuk menyimpan pasangan minterm
+            // I.S. dua buah node yang ingin dipasangkan terdefinisi 
+            // F.S. sepasang node ditambahkan ke linked list
         // procedure createNodePair(p, q : pointer to node) -> pointer to Node
             // membuat node baru menggunakan Node yang sudah ada
-            // I.S.
-            // F.S.
+            // I.S. node p dan q terdefinsi
+            // F.S. sebuah node r telah dibuat dari node p dan q
         // procedure tampilkanTabel()
             // menampilkan prime implicant table
-            // I.S.
-            // F.S.
+            // I.S. Tabel bertipe data implicant table telah terisi
+            // F.S. elemen pada Tabel ditampilkan dengan notasi minterm
         // procedure binaryFill(input p,q : pointer to node ;  output r : pointer to node)
             // mengisi nilai biner pada r dengan p dan q. Jika kedua bit sama, maka akan dipertahankan. Jika berbeda, akan bernilai -1
-            // I.S.
-            // F.S.
+            // I.S. p,q, dan r terdefinisi
+            // F.S. nilai biner r telah diperbaharui
         // procedure buatNode(input n : integer)
-            //
-            // I.S.
-            // F.S.
+            // membuat sebuah node dengan menerima input nilai minterm-nya
+            // I.S. -
+            // F.S. sebuah node telah terbuat
         // procedure inisiasiTabel()
             // menginisiasi seluruh elemen table menjadi -1
-            // I.S.
-            // F.S.
+            // I.S. sebuah variabel bertipe data implicantsTable bernama Tabel telah terdefinisi
+            // F.S. seluruh elemen Tabel di-inisiasi dengan nilai -1
         // procedure display()
             // menampilkan minterm dan pasangannya dan nilai biner pada setiap pass (L1, L2, L3, dst.)
-            // I.S.
-            // F.S.
+            // I.S. node-node pada linked list siap untuk dicetak
+            // F.S. sebuah baris pada L1, L2, dan L3 telah ditampilkan 
         // procedure pair()
-            // melakukan pemasangan node
-            // I.S.
-            // F.S.
+            // melakukan pemasangan node sekaligus mencetaknya dalam tabel L1, L2, dan L3
+            // I.S. linked list telah terdefinisi
+            // F.S. L1, L2, dan L3 tercetak (setelah pemanggilan rekursif terakhir selesai)
         // procedure tambahKeTabel()
-            //
-            // I.S.
-            // F.S.
+            // membuat tabel untuk mencari minimum cover
+            // I.S. prime implicant telah ditemukan
+            // F.S. tabel untuk mencari minimum cover telah dibuat
         // function ifPairingPossible(p,q : pointer to node) -> integer
             // memeriksa jika apakah hanya ada perbedaan satu bit antara p dan q (sehingga mungkin dipasangkan)
         // function findMaxInTable(row : pointer to integer)
             // mencari prime implikan ang memiliki minterm paling banyak
             // tidak digunakan pada suatu waktu dan mengembalikan banyak mintermnya
         // procedure analisisTabel()
-            // 
-            // I.S.
-            // F.S.
+            // menganalisis tabel minimum cover yang telah dibentuk dan mencetak fungsi logika yang telah diminimisasi ke layar
+            // I.S. tabel minimum cover sudah terdefinisi
+            // F.S. fungsi logika yang telah diminimisasi  dicetak ke layar
         // procedure hapusMintermDariTabel(input n : integer)
             // menghapus semua minterm pada suatu baris dan kolom implikan
-            // I.S.
-            // F.S.
+            // I.S. -
+            // F.S. seluruh minterm yang dicover prime implicant dihapus dari tabel
         // function banyakImplikan(n : integer, temp : pointer to integer) -> integer
             // mengembalikan berapa banyak implikan yang ada suatu minterm tertentu
         // procedure konversiBinerKeNotasiMinterm(input n : integer)
             // mengonversi dan mencetak biner ke notasi variabel
-            // I.S.
-            // F.S.
+            // I.S. implicantsTable bernama Tabel telah terdefinisi
+            // F.S. isi Tabel dalam bentuk variabel A,B,C,... telah dicetak ke layar
         // procedure validasi_file(char filename[])
             // memvalidasi nama dan format file eksternal
             // I.S. -
@@ -134,7 +134,7 @@ struct implicantsTable // Tabel prime implicant
     int brr[limit][limit];
     int top;                         
     int mintermCounter[limit]; // banyak minterm pada tabel
-} Table;
+} Tabel;
 
 // DEKLARASI PROTOTIPE FUNGSI
     // terkait algoritma minimisasi logika
@@ -160,8 +160,6 @@ int banyakImplikan(int,int*);
 void hapusMintermDariTabel(int);
 
     // terkait pemrosesan file
-void simpanKeFile(int solusi[], int n, int noFile);
-void hapusFile(int nFile);
 void validasi_file(char filename[]);
 
 // DEKLARASI VARIABEL
