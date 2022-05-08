@@ -129,3 +129,7 @@ selanjutnya agar m14 tercover, kita pilih P2. Maka kita peroleh fungsi logika ya
 ![mencari minimum cover tahap 3](./dll/img/ex/20_mencariMinimumCover3.png)
 
 ![Ekspresi logika setelah minimisasi](./dll/img/ex/21_ekspresiLogikaSetelahMinimisasi.png)
+
+---
+### Pranala
+[Power Point Presentasi](https://docs.google.com/presentation/d/1SC2WeGgGVr-4vIxENVfQkLed6XSSW-YfhKTqNqBGKzE/edit?usp=sharing)
