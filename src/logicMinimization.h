@@ -61,10 +61,6 @@
             // mengisi nilai biner pada r dengan p dan q. Jika kedua bit sama, maka akan dipertahankan. Jika berbeda, akan bernilai -1
             // I.S. p,q, dan r terdefinisi
             // F.S. nilai biner r telah diperbaharui
-        // procedure buatNode(input n : integer)
-            // membuat sebuah node dengan menerima input nilai minterm-nya
-            // I.S. -
-            // F.S. sebuah node telah terbuat
         // procedure inisiasiTabel()
             // menginisiasi seluruh elemen table menjadi -1
             // I.S. sebuah variabel bertipe data implicantsTable bernama Tabel telah terdefinisi
@@ -84,7 +80,7 @@
         // function ifPairingPossible(p,q : pointer to node) -> integer
             // memeriksa jika apakah hanya ada perbedaan satu bit antara p dan q (sehingga mungkin dipasangkan)
         // function findMaxInTable(row : pointer to integer)
-            // mencari prime implikan ang memiliki minterm paling banyak
+            // mencari prime implikan yang memiliki minterm paling banyak
             // tidak digunakan pada suatu waktu dan mengembalikan banyak mintermnya
         // procedure analisisTabel()
             // menganalisis tabel minimum cover yang telah dibentuk dan mencetak fungsi logika yang telah diminimisasi ke layar
@@ -122,7 +118,7 @@ struct Node                  // menyimpan informasi tentang minterm seperti bany
     int hasPaired;         // kondisi pemasangan
     int numberOfOnes;      // banyaknya '1' pada minterm
     struct vector paired;  // struct vector untuk menyatakan minterm berpasangan lain
-    int group;             // denote the group according to the number of ones
+    int group;             // menyatakan nomr grup sesuai jumlah angka satu pada minterm
     int binary[ukuranBit]; // menyimpan nilai biner dari minterm
     int numberOfPairs;    // berapa banyak pasangan yang telah terbentuk (contoh: 4 menyatakan 2 double atau 1 quad)
 };
@@ -130,10 +126,10 @@ typedef struct Node node;
 
 struct implicantsTable // Tabel prime implicant
 {
-    int arr[limit][ukuranBit];
-    int brr[limit][limit];
-    int top;                         
-    int mintermCounter[limit]; // banyak minterm pada tabel
+    int arr[limit][ukuranBit]; // array referensi sebelum mencetak fungsi logika yang telah diminimalisasi ke layar
+    int brr[limit][limit]; // array untuk mencari minimum cover
+    int top; // banyak implikan pada tabel implikan                         
+    int mintermCounter[limit]; // banyak minterm pada tabel implikan
 } Tabel;
 
 // DEKLARASI PROTOTIPE FUNGSI
@@ -155,7 +151,6 @@ void analisisTabel();
 void binaryFill(node*,node*,node*);
 void konversiBinerKeNotasiMinterm(int);
 int findMaxInTable(int*);
-void inisiasiTabel();
 int banyakImplikan(int,int*);
 void hapusMintermDariTabel(int);
 

@@ -31,11 +31,11 @@ atau dalam bentuk kanonikal:
 
 ![Ekspresi Awal Logika Bentuk Kanonikal](./dll/img/ex/03_ekspresiAwalLogikaBentukKanonikal.png)
 
-> catatan : variabel dengan huruf kecil menunjukkan komplemen dari variabel huruf besar. Sedangkan variabel bernilai _logic 1_.
+> catatan : variabel dengan huruf kecil menunjukkan komplemen dari variabel huruf besar. Sedangkan variabel huruf besar bernilai _logic 1_.
 
 ### Solusi
 
-Tahapan secara garis besar dibagi menjadi dua, yaitu mencari prime implicant kemudian menemukan minimum cover.
+Tahapan metode tabular secara garis besar dibagi menjadi dua, yaitu mencari prime implicant kemudian menemukan minimum cover.
 
 #### Langkah Pertama : Membuat L1 dengan mengurutkan term berdasarkan banyak angka **1**
 
@@ -47,7 +47,7 @@ Kita mengelompokkan term berdasarkan banyaknya angka **1** yang mereka punya seh
 
 #### Langkah kedua : kelompokkan minterm pada L1 yang hanya berbeda satu term
 
-Contoh minterm yang dipasangkan (yang hanya berbeda satu term) adalah minterm ke-1 dan minterm ke-3.
+Contoh minterm yang dipasangkan (yang hanya berbeda satu term) adalah minterm ke-3 dan minterm ke-7.
 
 ![contoh pasangan minterm](./dll/img/ex/05_ContohPasangan.png)
 
@@ -88,7 +88,7 @@ sekarang kita harus memilih prime implicant se-sedikit mungkin sehingga semua mi
 selanjutnya, agar m12 dan m13 tercover, kita harus memilih P4. Maka kita peroleh tabel minimum cover yang lebih sederhana sebagai berikut:
 ![tabel minimum cover tahap 3](./dll/img/ex/11_MencariMinimumCover3.png)
 
-terakhir, untuk meng-_cover_ m7, kita bisa bebas memilih P2 ataupun P3. Kedua pilihan sama baiknya. Misalkan untuk sekarang kita pilih P2. Maka semua minterm telah tercover dan kita peroleh fungsi logika yang telah di-minimisasi sebagai berikut:
+terakhir, untuk men-_cover_ m7, kita bisa bebas memilih P2 ataupun P3. Kedua pilihan sama baiknya. Misalkan untuk sekarang kita pilih P2. Maka semua minterm telah tercover dan kita peroleh fungsi logika yang telah di-minimisasi sebagai berikut:
 
 ![tabel minimum cover tahap 4](./dll/img/ex/12_MencariMinimumCover4.png)
 
@@ -116,7 +116,7 @@ semua minterm pada L1 telah ter-cover oleh pasangan minterm pada L2 sehingga L1 
 
 Maka kita punya prime implicant : P1 (11,15), P2 (14,15), dan P3 (5,7,13,15).
 
-Sekarang yang membedakan `don't care` dengan minterm biasa adalah pada saat pencarian minimum cover, `don't care` tidak perlu masuk sebagai kolom (horizontal). Berikut adalah taber minimum covernya:
+Sekarang yang membedakan `don't care` dengan minterm biasa adalah pada saat pencarian minimum cover, `don't care` tidak perlu masuk sebagai kolom (horizontal). Berikut adalah tabel minimum covernya:
 
 ![mencari minimum cover tahap 1](./dll/img/ex/18_mencariMinimumCover1.png)
 
