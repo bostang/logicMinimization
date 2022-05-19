@@ -59,7 +59,6 @@ void help()
     // ALGORITMA
     printf("--- Opsi Aksi ---\n");
     printf("L : Melakukan minimisasi logika (algoritma utama)\n");
-    printf("d : menghapus file input ataupun file output\n");
     printf("q : keluar dari program\n");
     printf("h : bantuan\n");
     printf("\n");
