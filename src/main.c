@@ -12,6 +12,8 @@
         // isProgramFinished : boolean
         // modeInput : character
         // counter : integer { berapa kali algoritma minimisasi logika telah dijalankan }
+        // SOPorPOS : integer { minimisasi terhadap SOP atau POS }
+            // 0 : SOP, 1 : POS
 
 // ALGORITMA UTAMA
 
@@ -26,6 +28,7 @@ int main(void)
     char aksi;
     int isProgramFinished = 0;
     char modeInput;
+    int SOPorPOS;
     int counter = 0;
 
     opening();
@@ -38,18 +41,37 @@ int main(void)
         if (aksi == 'L')
         {
                 // menerima masukan mode input sekaligus validasi
+            printf("Masukkan bentuk fungsi logika:\t\t(0 : SOP, 1 : POS)\n>>> ");
+            scanf("%d",&SOPorPOS);
+            fflush(stdin);
             printf("Masukkan mode input:\t\t(m : manual, f : file)\n>>> ");
             scanf("%c",&modeInput);
             fflush(stdin);
-            if (modeInput == 'm' || modeInput == 'f')
+            if (SOPorPOS == 0)
             {
-                counter++;
-                logicMinimization(modeInput, counter);
+                if (modeInput == 'm' || modeInput == 'f')
+                {
+                    counter++;
+                    logicMinimization(modeInput, counter,0);
+                }
+                else
+                {
+                    printf("mode input tidak valid!\n");
+                }
             }
-            else
+            else if (SOPorPOS == 1)
             {
-                printf("mode input tidak valid!\n");
+                if (modeInput == 'm' || modeInput == 'f')
+                {
+                    counter++;
+                    logicMinimization(modeInput, counter,1);
+                }
+                else
+                {
+                    printf("mode input tidak valid!\n");
+                }
             }
+           
 
         }
         else if (aksi == 'q')

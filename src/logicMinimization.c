@@ -57,7 +57,7 @@ void validasi_file(char filename[])
 }
 
     // Fungsi/Prosedur terkait algoritma minimisasi logika
-int logicMinimization(char modeInput, int counter)
+int logicMinimization(char modeInput, int counter, int SOPorPOS)
 {
     // KAMUS LOKAL
         // Variabel
@@ -73,7 +73,7 @@ int logicMinimization(char modeInput, int counter)
             // n_interation : integer { pencacah berapa banyak iterasi yang sudah terjadi }
     // ALGORITMA
     int n_iteration = 1;
-    int i,temp,kondisiDontCare=0,banyakDontCare, banyakMinterm;
+    int i,temp,kondisiDontCare=0,banyakDontCare, banyakMinterm, banyakMaxTerm;
     char line[MAX_LEN];
     char* token;
     
@@ -85,136 +85,273 @@ int logicMinimization(char modeInput, int counter)
     for(i=0; i<limit; i++)
         dontCares[i]=-1;
 
-    if (modeInput == 'm')
+    if (SOPorPOS == 0)
     {
-        printf("Masukkan banyaknya minterm:\n>>> ");
-        scanf("%d",&banyakMinterm);
+        if (modeInput == 'm')
+        {
+            printf("Masukkan banyaknya minterm:\n>>> ");
+            scanf("%d",&banyakMinterm);
 
-        if(banyakMinterm==0)
-            return 1;
-        
-        for(i=0; i<banyakMinterm; i++)
-        {
-            printf("Masukkan minterm ke-%d:\n>>> ",i+1);
-            scanf("%d",&temp);
-            minterms[temp]=1;
-            add(temp);
-        }
-        printf("Apakah ada don't care? (1/0)\n>>> ");
-        scanf("%d",&kondisiDontCare);
-        if(kondisiDontCare==1)
-        {
-            printf("Masukkan banyaknya don't care:\n>>> ");
-            scanf("%d",&banyakDontCare);
-            for(i=0; i<banyakDontCare; i++)
+            if(banyakMinterm==0)
+                return 1;
+            
+            for(i=0; i<banyakMinterm; i++)
             {
-                printf("Masukkan don't care ke-%d:\n>>> ",i+1);
+                printf("Masukkan minterm ke-%d:\n>>> ",i+1);
                 scanf("%d",&temp);
-                dontCares[temp]=1;
+                minterms[temp]=1;
                 add(temp);
             }
-        }
-    }
-
-    else if (modeInput == 'f')
-    {
-        // menerima input file eksternal dan validasi
-        char filename[MAX_LEN];
-        printf("Masukkan nama File eksternal:\n>>> ");
-        scanf("%s", &filename);
-
-        validasi_file(filename);
-        // membaca isi file eksternal (setelah divalidasi)
-            
-        FILE* fp = fopen(filename, "r");
-
-        // Cek file sampai akhir
-        fseek(fp, 0, SEEK_END);
-        // Jika file kosong
-        if (ftell(fp)==0)
-        {
-            printf("Error: file kosong!\n");
-            exit(1);
+            printf("Apakah ada don't care? (1/0)\n>>> ");
+            scanf("%d",&kondisiDontCare);
+            if(kondisiDontCare==1)
+            {
+                printf("Masukkan banyaknya don't care:\n>>> ");
+                scanf("%d",&banyakDontCare);
+                for(i=0; i<banyakDontCare; i++)
+                {
+                    printf("Masukkan don't care ke-%d:\n>>> ",i+1);
+                    scanf("%d",&temp);
+                    dontCares[temp]=1;
+                    add(temp);
+                }
+            }
         }
 
-        fseek(fp, 0, SEEK_SET); // Kembali ke awal
-
-        // Baca baris pertama : banyak minterm
-        fgets(line, MAX_LEN, fp);
-        token = strtok(line, "\n");
-        banyakMinterm = atoi(token);
-
-        if(banyakMinterm==0)
-            return 1;
-
-        // Baca baris kedua : daftar minterm
-        
-        // Menyimpan data dari file ke dalam graph
-        fgets(line, MAX_LEN, fp);
-        token = strtok(line, ",");
-        minterms[atoi(token)]=1;
-        add(atoi(token));
-        
-        for (int i=1;i<(banyakMinterm-1);i++)
+        else if (modeInput == 'f')
         {
-            token = strtok(NULL, ",");
-            minterms[atoi(token)]=1;
-            add(atoi(token));
-        }
-        token = strtok(NULL, "\n"); // membaca elemen terakhir pada baris kedua
-        minterms[atoi(token)]=1;
-        add(atoi(token));
+            // menerima input file eksternal dan validasi
+            char filename[MAX_LEN];
+            printf("Masukkan nama File eksternal:\n>>> ");
+            scanf("%s", &filename);
 
-        // Baca baris ketiga : apakah ada don't care/tidak
-        fgets(line, MAX_LEN, fp);
-        token = strtok(line, "\n");
-        kondisiDontCare = atoi(token);
+            validasi_file(filename);
+            // membaca isi file eksternal (setelah divalidasi)
+                
+            FILE* fp = fopen(filename, "r");
 
-        if(kondisiDontCare==1)
-        {
-            // Baca baris keempat : banyak don't care
+            // Cek file sampai akhir
+            fseek(fp, 0, SEEK_END);
+            // Jika file kosong
+            if (ftell(fp)==0)
+            {
+                printf("Error: file kosong!\n");
+                exit(1);
+            }
+
+            fseek(fp, 0, SEEK_SET); // Kembali ke awal
+
+            // Baca baris pertama : banyak minterm
             fgets(line, MAX_LEN, fp);
             token = strtok(line, "\n");
-            banyakDontCare = atoi(token);
-        
-            // Baca baris kelima : daftar don't care
+            banyakMinterm = atoi(token);
+
+            if(banyakMinterm==0)
+                return 1;
+
+            // Baca baris kedua : daftar minterm
+            
+            // Menyimpan data dari file ke dalam graph
             fgets(line, MAX_LEN, fp);
             token = strtok(line, ",");
-            dontCares[atoi(token)]=1;
+            minterms[atoi(token)]=1;
             add(atoi(token));
             
-            for(i=1; i<(banyakDontCare-1); i++)
+            for (int i=1;i<(banyakMinterm-1);i++)
             {
                 token = strtok(NULL, ",");
+                minterms[atoi(token)]=1;
+                add(atoi(token));
+            }
+            token = strtok(NULL, "\n"); // membaca elemen terakhir pada baris kedua
+            minterms[atoi(token)]=1;
+            add(atoi(token));
+
+            // Baca baris ketiga : apakah ada don't care/tidak
+            fgets(line, MAX_LEN, fp);
+            token = strtok(line, "\n");
+            kondisiDontCare = atoi(token);
+
+            if(kondisiDontCare==1)
+            {
+                // Baca baris keempat : banyak don't care
+                fgets(line, MAX_LEN, fp);
+                token = strtok(line, "\n");
+                banyakDontCare = atoi(token);
+            
+                // Baca baris kelima : daftar don't care
+                fgets(line, MAX_LEN, fp);
+                token = strtok(line, ",");
+                dontCares[atoi(token)]=1;
+                add(atoi(token));
+                
+                for(i=1; i<(banyakDontCare-1); i++)
+                {
+                    token = strtok(NULL, ",");
+                    dontCares[atoi(token)]=1;
+                    add(atoi(token));
+                }
+                token = strtok(NULL, "\n");
                 dontCares[atoi(token)]=1;
                 add(atoi(token));
             }
-            token = strtok(NULL, "\n");
-            dontCares[atoi(token)]=1;
-            add(atoi(token));
+            
+            fclose(fp);
         }
-        
-        fclose(fp);
-    }
 
-    else
-    {
+        else
+        {
+            return 0;
+        }
+
+        Tabel.top=0;
+        inisiasiTabel();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
+        pair(&n_iteration);           // melakukan pemasangan minterm (pengisian tabel prime implicant)
+        tampilkanTabel(0); // mencetak tabel prime implicant
+        printf("Fungsi Logika setelah minimisasi:\n\t");
+        analisisTabel(0);  // menganalisis tabel dan mencetak hasil
+            
+                // head dan head2 harus kembali di-NULL kan agar hasil benar pada iterasi berikutnya
+        head = NULL;
+        head2 = NULL;
+        printf("\n");
+        
         return 0;
     }
+    else if(SOPorPOS == 1)
+    {
+        if (modeInput == 'm')
+        {
+            printf("Masukkan banyaknya maxterm:\n>>> ");
+            scanf("%d",&banyakMaxTerm);
 
-    Tabel.top=0;
-    inisiasiTabel();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
-    pair(&n_iteration);           // melakukan pemasangan minterm (pengisian tabel prime implicant)
-    tampilkanTabel(); // mencetak tabel prime implicant
-    printf("Fungsi Logika setelah minimisasi:\n\t");
-    analisisTabel();  // menganalisis tabel dan mencetak hasil
-           
-            // head dan head2 harus kembali di-NULL kan agar hasil benar pada iterasi berikutnya
-    head = NULL;
-    head2 = NULL;
-    printf("\n");
-    
-    return 0;
+            if(banyakMaxTerm==0)
+                return 1;
+            
+            for(i=0; i<banyakMaxTerm; i++)
+            {
+                printf("Masukkan maxterm ke-%d:\n>>> ",i+1);
+                scanf("%d",&temp);
+                maxterms[temp]=1;
+                add(temp);
+            }
+            printf("Apakah ada don't care? (1/0)\n>>> ");
+            scanf("%d",&kondisiDontCare);
+            if(kondisiDontCare==1)
+            {
+                printf("Masukkan banyaknya don't care:\n>>> ");
+                scanf("%d",&banyakDontCare);
+                for(i=0; i<banyakDontCare; i++)
+                {
+                    printf("Masukkan don't care ke-%d:\n>>> ",i+1);
+                    scanf("%d",&temp);
+                    dontCares[temp]=1;
+                    add(temp);
+                }
+            }
+        }
+
+        else if (modeInput == 'f')
+        {
+            // menerima input file eksternal dan validasi
+            char filename[MAX_LEN];
+            printf("Masukkan nama File eksternal:\n>>> ");
+            scanf("%s", &filename);
+
+            validasi_file(filename);
+            // membaca isi file eksternal (setelah divalidasi)
+                
+            FILE* fp = fopen(filename, "r");
+
+            // Cek file sampai akhir
+            fseek(fp, 0, SEEK_END);
+            // Jika file kosong
+            if (ftell(fp)==0)
+            {
+                printf("Error: file kosong!\n");
+                exit(1);
+            }
+
+            fseek(fp, 0, SEEK_SET); // Kembali ke awal
+
+            // Baca baris pertama : banyak maxterm
+            fgets(line, MAX_LEN, fp);
+            token = strtok(line, "\n");
+            banyakMaxTerm = atoi(token);
+
+            if(banyakMaxTerm==0)
+                return 1;
+
+            // Baca baris kedua : daftar maxterm
+            
+            // Menyimpan data dari file ke dalam graph
+            fgets(line, MAX_LEN, fp);
+            token = strtok(line, ",");
+            maxterms[atoi(token)]=1;
+            add(atoi(token));
+            
+            for (int i=1;i<(banyakMaxTerm-1);i++)
+            {
+                token = strtok(NULL, ",");
+                maxterms[atoi(token)]=1;
+                add(atoi(token));
+            }
+            token = strtok(NULL, "\n"); // membaca elemen terakhir pada baris kedua
+            maxterms[atoi(token)]=1;
+            add(atoi(token));
+
+            // Baca baris ketiga : apakah ada don't care/tidak
+            fgets(line, MAX_LEN, fp);
+            token = strtok(line, "\n");
+            kondisiDontCare = atoi(token);
+
+            if(kondisiDontCare==1)
+            {
+                // Baca baris keempat : banyak don't care
+                fgets(line, MAX_LEN, fp);
+                token = strtok(line, "\n");
+                banyakMaxTerm = atoi(token);
+            
+                // Baca baris kelima : daftar don't care
+                fgets(line, MAX_LEN, fp);
+                token = strtok(line, ",");
+                dontCares[atoi(token)]=1;
+                add(atoi(token));
+                
+                for(i=1; i<(banyakDontCare-1); i++)
+                {
+                    token = strtok(NULL, ",");
+                    dontCares[atoi(token)]=1;
+                    add(atoi(token));
+                }
+                token = strtok(NULL, "\n");
+                dontCares[atoi(token)]=1;
+                add(atoi(token));
+            }
+            
+            fclose(fp);
+        }
+
+        else
+        {
+            return 0;
+        }
+
+        Tabel.top=0;
+        inisiasiTabel();    // inisiasi tabel prime implicant dengan semua sel bernilai -1 (kosong)
+        pair(&n_iteration);           // melakukan pemasangan minterm (pengisian tabel prime implicant)
+        tampilkanTabel(1); // mencetak tabel prime implicant
+        printf("Fungsi Logika setelah minimisasi:\n\t");
+        analisisTabel(1);  // menganalisis tabel dan mencetak hasil
+            
+                // head dan head2 harus kembali di-NULL kan agar hasil benar pada iterasi berikutnya
+        head = NULL;
+        head2 = NULL;
+        printf("\n");
+        
+        return 0;
+    }
+  
 }
 
 int cekDontCare(int i)
@@ -323,24 +460,40 @@ node* createNodePair(node *p,node *q)
     return r;
 }
 
-void tampilkanTabel()
+void tampilkanTabel(int SOPorPOS)
 {
     // KAMUS LOKAL
         // Variabel
             // i, j : integer
     // ALGORITMA
     int i,j;
-    printf("Tabel Prime Implicant:\n");
-    for(i=0; i<Tabel.top; i++)
+    if (SOPorPOS == 0)
     {
-        konversiBinerKeNotasiMinterm(i);
-        for(j=0; j<=limit-1; j++)
+        printf("Tabel Prime Implicant:\n");
+        for(i=0; i<Tabel.top; i++)
         {
-
-            if(Tabel.brr[i][j]==1)
-                printf("   %d  ",j);
+            konversiBinerKeNotasiMinterm(i);
+            for(j=0; j<=limit-1; j++)
+            {
+                if(Tabel.brr[i][j]==1)
+                    printf("   %d  ",j);
+            }
+            printf("\n");
         }
-        printf("\n");
+    }
+    else if(SOPorPOS == 1)
+    {
+        printf("Tabel Prime Implicant:\n");
+        for(i=0; i<Tabel.top; i++)
+        {
+            konversiBinerKeNotasiMaxterm(i);
+            for(j=0; j<=limit-1; j++)
+            {
+                if(Tabel.brr[i][j]==1)
+                    printf("   %d  ",j);
+            }
+            printf("\n");
+        }
     }
 }
 
@@ -369,6 +522,7 @@ node* buatNode(int n)
 {
     // KAMUS LOKAL
         // Variabel
+
             // c : integer
             // p : pointer to node
     // ALGORITMA
@@ -589,7 +743,7 @@ int findMaxInTable(int *row)
     return greatest;
 }
 
-void analisisTabel()
+void analisisTabel(int SOPorPOS)
 {
     // KAMUS LOKAL
         // Variabel
@@ -603,51 +757,103 @@ void analisisTabel()
     int i,j,k,greatestRow,ifFirst=1;
     int essentialPrimeImplicant[limit]; // menyimpan nomor baris dari semua essential prime implikan ke dalam sebuah array of integer
     int temp,c;
-    for(i=0; i<=limit-1; i++)
-        essentialPrimeImplicant[i]=-1;
-    for(i=0; i<=limit-1; i++)
+
+    if (SOPorPOS == 0)
     {
-        if(minterms[i]==1)
+        for(i=0; i<=limit-1; i++)
+            essentialPrimeImplicant[i]=-1;
+        for(i=0; i<=limit-1; i++)
         {
-            if(banyakImplikan(i,&temp)==1)
+            if(minterms[i]==1)
             {
-                essentialPrimeImplicant[i]=temp;
+                if(banyakImplikan(i,&temp)==1)
+                {
+                    essentialPrimeImplicant[i]=temp;
+                }
             }
         }
-    }
 
-    for(i=0; i<=limit-1; i++)
-    {
-        if(essentialPrimeImplicant[i]!=-1)
+        for(i=0; i<=limit-1; i++)
+        {
+            if(essentialPrimeImplicant[i]!=-1)
+            {
+                if(ifFirst!=1)
+                    printf(" + ");
+                else
+                    ifFirst=0;
+                konversiBinerKeNotasiMinterm(essentialPrimeImplicant[i]);
+
+                hapusMintermDariTabel(essentialPrimeImplicant[i]);
+                for(j=i+1; j<=limit-1; j++)
+                {
+                    if(essentialPrimeImplicant[j]==essentialPrimeImplicant[i])
+                        essentialPrimeImplicant[j]=-1;
+                }
+                essentialPrimeImplicant[i]=-1;
+
+            }
+        }
+
+        while(findMaxInTable(&greatestRow)!=0)
         {
             if(ifFirst!=1)
                 printf(" + ");
             else
                 ifFirst=0;
-            konversiBinerKeNotasiMinterm(essentialPrimeImplicant[i]);
+            konversiBinerKeNotasiMinterm(greatestRow);
 
-            hapusMintermDariTabel(essentialPrimeImplicant[i]);
-            for(j=i+1; j<=limit-1; j++)
-            {
-                if(essentialPrimeImplicant[j]==essentialPrimeImplicant[i])
-                    essentialPrimeImplicant[j]=-1;
-            }
-            essentialPrimeImplicant[i]=-1;
-
+            hapusMintermDariTabel(greatestRow);
         }
+        printf("\b");     
     }
-
-    while(findMaxInTable(&greatestRow)!=0)
+    else if (SOPorPOS == 1)
     {
-        if(ifFirst!=1)
-            printf(" + ");
-        else
-            ifFirst=0;
-        konversiBinerKeNotasiMinterm(greatestRow);
+        for(i=0; i<=limit-1; i++)
+            essentialPrimeImplicant[i]=-1;
+        for(i=0; i<=limit-1; i++)
+        {
+            // ???
+            if(maxterms[i]!=1)
+            {
+                if(banyakImplikan(i,&temp)==1)
+                {
+                    essentialPrimeImplicant[i]=temp;
+                }
+            }
+        }
 
-        hapusMintermDariTabel(greatestRow);
+        for(i=0; i<=limit-1; i++)
+        {
+            if(essentialPrimeImplicant[i]!=-1)
+            {
+                if(ifFirst!=1)
+                    printf(" . ");
+                else
+                    ifFirst=0;
+                konversiBinerKeNotasiMaxterm(essentialPrimeImplicant[i]);
+                hapusMaxtermDariTabel(essentialPrimeImplicant[i]);
+                for(j=i+1; j<=limit-1; j++)
+                {
+                    if(essentialPrimeImplicant[j]==essentialPrimeImplicant[i])
+                        essentialPrimeImplicant[j]=-1;
+                }
+                essentialPrimeImplicant[i]=-1;
+
+            }
+        }
+
+        while(findMaxInTable(&greatestRow)!=0)
+        {
+            if(ifFirst!=1)
+                printf(" . ");
+            else
+                ifFirst=0;
+            konversiBinerKeNotasiMaxterm(greatestRow);
+            hapusMaxtermDariTabel(greatestRow);
+        }
+        printf("\b");    
     }
-    printf("\b");
+   
 }
 
 void hapusMintermDariTabel(int n) 
@@ -662,6 +868,31 @@ void hapusMintermDariTabel(int n)
         if(Tabel.brr[n][i]==1)
         {
             minterms[i]=-1;
+
+            for(j=0; j<Tabel.top; j++)
+            {
+                if(Tabel.brr[j][i]==1)
+                {
+                    Tabel.brr[j][i]=-1;
+                    Tabel.mintermCounter[j]--;
+                }
+            }
+        }
+    }
+}
+
+void hapusMaxtermDariTabel(int n) 
+{
+    // KAMUS LOKAL
+        // Variabel
+            // i,j : integer
+    // ALGORITMA
+    int i,j;
+    for(i=0; i<=limit-1; i++)
+    {
+        if(Tabel.brr[n][i]==1)
+        {
+            maxterms[i]=-1;
 
             for(j=0; j<Tabel.top; j++)
             {
@@ -722,6 +953,51 @@ void konversiBinerKeNotasiMinterm(int n)
         }
         c++;
     }
+}
+
+void konversiBinerKeNotasiMaxterm(int n)
+{
+   // KAMUS LOKAL
+        // Variabel
+            // c : integer
+            // characterNormal : array [0..7] of character
+            // characterComplement : array [0..7] of character
+            // jmlPlus : jumlah tanda plus yang dibutuhkan untuk mencetak ekspresi POS
+    // ALGORITMA 
+    int c=0;
+    int i=0;
+    int jmlPlus=0;
+
+    // mencari banyaknya jumlah tanda plus yang dibutuhkan
+    while(i<=ukuranBit)
+    {
+        if(Tabel.arr[n][i]!=-1)
+        {
+            jmlPlus++;
+        }
+        i++;
+    }
+
+    // pada POS, huruf kecil menyatakan 1 dan huruf besar menyatakan 0 (kebalikan dari SOP)
+    char charactersNormal[]= {'a','b','c','d','e','f','g','h'};
+    char charactersComplement[]= {'A','B','C','D','E','F','G','H'};
+    printf("(");
+    while(c!=ukuranBit)
+    {
+        if(Tabel.arr[n][c]!=-1)
+        {
+            if(Tabel.arr[n][c]==1)       
+                printf("%c",charactersNormal[c]);
+
+            else
+                printf("%c",charactersComplement[c]);
+            
+            if(c<jmlPlus)
+                printf("+");
+        }
+        c++;
+    }
+    printf(")");
 }
 
 int ifPairingPossible(node *a,node *b)

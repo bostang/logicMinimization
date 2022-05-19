@@ -102,6 +102,7 @@
             // F.S. nama file ada dan format file benar (.txt)
     
 // DEKLARASI KONSTANTA
+    // ubah secara manual UkuranBit dan limit = 2^ukuranBit
 #define ukuranBit 4
 #define limit 16
 #define MAX_LEN 127
@@ -134,12 +135,12 @@ struct implicantsTable // Tabel prime implicant
 
 // DEKLARASI PROTOTIPE FUNGSI
     // terkait algoritma minimisasi logika
-int logicMinimization(char modeInput, int counter);
+int logicMinimization(char modeInput, int counter, int SOPorPOS);
 void add(int);
 node* buatNode(int);
 void pair(int* n_iteration);
 void display();
-void tampilkanTabel();
+void tampilkanTabel(int SOPorPOS);
 node* createNodePair(node*,node*);
 void binaryFill(node*,node*,node*);
 void inisiasiTabel();
@@ -147,12 +148,14 @@ int ifPairingPossible(node*,node*);
 int cekDontCare(int);
 void addPair(node*,node*);
 void tambahKeTabel();
-void analisisTabel();
+void analisisTabel(int SOPorPOS);
 void binaryFill(node*,node*,node*);
 void konversiBinerKeNotasiMinterm(int);
+void konversiBinerKeNotasiMaxterm(int);
 int findMaxInTable(int*);
 int banyakImplikan(int,int*);
 void hapusMintermDariTabel(int);
+void hapusMaxtermDariTabel(int n);
 
     // terkait pemrosesan file
 void validasi_file(char filename[]);
@@ -162,4 +165,5 @@ node *head,*head2;
 
 int maxGroup,newMaxGroup;   
 int minterms[limit];
+int maxterms[limit];
 int dontCares[limit];
