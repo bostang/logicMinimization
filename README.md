@@ -132,4 +132,5 @@ selanjutnya agar m14 tercover, kita pilih P2. Maka kita peroleh fungsi logika ya
 
 ---
 ### Pranala
-[Power Point Presentasi](https://docs.google.com/presentation/d/1SC2WeGgGVr-4vIxENVfQkLed6XSSW-YfhKTqNqBGKzE/edit?usp=sharing)
+[Power Point Presentasi](https://drive.google.com/file/d/1bAysF_QcfKmCqEzcrFrfvqr6bCgz1ZG4/view?usp=sharing)
+[Laporan](https://drive.google.com/file/d/1Q9cKiGag43oNK43nnI79BFOhjF8o7rt1/view?usp=sharing)
